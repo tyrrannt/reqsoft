@@ -1,0 +1,13 @@
+# Project exclude paths
+*.log
+*.pot
+*.pyc
+*.json
+.env
+.idea
+__pycache__
+db.sqlite3
+media
+static
+debug.*
+rsync
