@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['www.reqsoft.ru', 'reqsoft.ru', 'localhost']
+ALLOWED_HOSTS = ['www.reqsoft.ru', 'reqsoft.ru', 'localhost', '192.168.0.105']
 
 
 # Application definition
