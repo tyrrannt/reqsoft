@@ -93,13 +93,12 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME':  config('NAME'),
-            'USER':  config('USER'),
-            'PASSWORD':  config('PASSWORD'),
-            'HOST':  config('HOST'),
+            'NAME':  'djangobd',
+            'USER':  'djangouser',
+            'PASSWORD':  'PDO@rLv@Server',
+            'HOST':  'localhost',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
