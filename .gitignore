@@ -11,4 +11,4 @@ media
 static
 debug.*
 rsync
-settings.py
+settings-local.py
