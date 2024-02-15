@@ -28,7 +28,7 @@
     <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="{% static '' %}assets/css/style.css" rel="stylesheet">
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 
 </head>
 <body>
@@ -44,16 +44,28 @@
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="#hero">ГЛАВНОЕ</a></li>
-                    <li><a class="nav-link scrollto" href="#about">СТАТЬИ</a></li>
+                    <li class="dropdown"><a href="{% url 'blog_app:article_list' %}">СТАТЬИ <i class="bi bi-chevron-down"></i></a>
+                    {% load mptt_tags %}
+                    {% full_tree_for_model blog_app.Category as categories %}
+                        <ul>
+                            {% recursetree categories %}
+                                        <li class="dropdown"><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                                            {% if not node.is_leaf_node %}
+                                                <ul>{% endif %}{{ children }}{% if not node.is_leaf_node %}</li>
+                                                </ul>{% endif %}</li>
+                                    {% endrecursetree %}
+                        </ul>  
+                    </li>                     
+                                       
                     <li class="dropdown"><a href="#"><span>ФАЙЛЫ</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
-{#                            <li><a href="#">Drop Down 1</a></li>#}
-{#                            <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i#}
-{#                                    class="bi bi-chevron-right"></i></a>#}
-{#                                <ul>#}
-{#                                    <li><a href="#">Deep Drop Down 1</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i
+                                    class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown megamenu"><a href="#"><span>ПРОФИЛЬ</span> <i class="bi bi-chevron-down"></i></a>

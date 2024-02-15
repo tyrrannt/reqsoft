@@ -1,0 +1,111 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+
+{% block Main %}
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <ol>
+                <li><a href="index.html">Home</a></li>
+                <li>Blog</li>
+            </ol>
+            <h2>Blog</h2>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+            <div class="row">
+                <div class="col-lg-8 entries">
+                    {% for post in object_list %}
+                    <article class="entry">
+                        <div class="entry-img">
+                            <img src="{% if post.thumbnail %}{{ post.thumbnail }}{% endif %}" alt="" class="img-fluid">
+                        </div>
+                        <h2 class="entry-title">
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </h2>
+                        <div class="entry-meta">
+                            <ul>
+                                <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
+                                        href="blog-single.html">{{ post.author }}</a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
+                                        href="blog-single.html">
+                                    <time datetime="2020-01-01">{{ post.time_create }}</time>
+                                </a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a
+                                        href="blog-single.html">12 Comments</a></li>
+                            </ul>
+                        </div>
+                        <div class="entry-content">
+                            <p>
+                                {{ post.short_description }}
+                            </p>
+                            <div class="read-more">
+                                <a href="{{ post.get_absolute_url }}">Подробнее ...</a>
+                            </div>
+                        </div>
+                    </article><!-- End blog entry -->
+                    {% endfor %}
+                    
+                    {% include 'main_app/paginator.html' %}
+
+                </div><!-- End blog entries list -->
+
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <h3 class="sidebar-title">Поиск</h3>
+                        <div class="sidebar-item search-form">
+                            <form action="">
+                                <input type="text">
+                                <button type="submit"><i class="bi bi-search"></i></button>
+                            </form>
+                        </div><!-- End sidebar search formn-->
+                        {% load mptt_tags %}
+
+                            <h3 class="sidebar-title">Категории</h3>
+                            {% full_tree_for_model blog_app.Category as categories %}
+                            <div class="sidebar-item categories">
+                                <ul>
+                                    {% recursetree categories %}
+                                        <li class="dropdown"><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                                            {% if not node.is_leaf_node %}
+                                                <ul>{% endif %}{{ children }}{% if not node.is_leaf_node %}</li>
+                                                </ul>{% endif %}</li>
+                                    {% endrecursetree %}
+                                </ul>
+                            </div><!-- End sidebar categories-->
+                        <h3 class="sidebar-title">Последние статьи</h3>
+                        <div class="sidebar-item recent-posts">
+                            {% for item in object_list %}
+                            <div class="post-item clearfix">
+                                <img src="{% if post.thumbnail %}{{ post.thumbnail }}{% endif %}" alt="">
+                                <h4><a href="blog-single.html">{{ item.title }}</a></h4>
+                                <time datetime="2020-01-01">{{ item.time_create }}</time>
+                            </div>
+                            {% endfor %}
+                        </div><!-- End sidebar recent posts-->
+
+                        <h3 class="sidebar-title">Теги</h3>
+                        <div class="sidebar-item tags">
+                            <ul>
+                                <li><a href="#">App</a></li>
+                                <li><a href="#">IT</a></li>                                
+                            </ul>
+                        </div><!-- End sidebar tags-->
+
+                    </div><!-- End sidebar -->
+
+                </div><!-- End blog sidebar -->
+
+            </div>
+
+        </div>
+    </section><!-- End Blog Section -->
+
+{% endblock %}
+
+

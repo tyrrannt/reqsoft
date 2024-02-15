@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main_app.apps.MainAppConfig',
     'customeuser_app.apps.CustomeuserAppConfig',
+    'blog_app.apps.BlogAppConfig',
+    'ckeditor',
+    'ckeditor_uploader',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -133,13 +137,31 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    pathlib.Path.joinpath(BASE_DIR, "static"),
+    pathlib.Path.joinpath(BASE_DIR, "static/"),
 ]
-# STATIC_ROOT = 'static/'
+# STATIC_ROOT = (BASE_DIR / 'static')
 
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = 'media/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = (BASE_DIR / 'media')
+
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+CKEDITOR_RESTRICT_BY_DATE = True
+CKEDITOR_BROWSE_SHOW_DIRS = True
+CKEDITOR_UPLOAD_PATH = pathlib.Path.joinpath(BASE_DIR, f'{MEDIA_URL}/uploads')
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'stylesSet': [
+            {
+                "name": 'Lead',
+                "element": 'p',
+                "attributes": {'class': 'lead'},
+            },
+        ],
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
