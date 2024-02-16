@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 
-
 def index(request):
     return render(request, 'main_app/main.html')
+
 
 def tr_handler404(request, exception):
     """
@@ -33,4 +33,3 @@ def tr_handler403(request, exception):
         'title': 'Ошибка доступа: 403',
         'error_message': 'Доступ к этой странице ограничен',
     })
-

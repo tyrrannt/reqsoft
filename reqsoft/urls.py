@@ -33,4 +33,7 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    # import debug_toolbar, so that it can be used in development
+    urlpatterns = [path('__debug__/', include('debug_toolbar.urls'))] + urlpatterns
+    # serve media files in development
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
