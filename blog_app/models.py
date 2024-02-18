@@ -5,6 +5,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from taggit.managers import TaggableManager
+from taggit.models import Tag
 
 from reqsoft.utils import unique_slugify
 
@@ -45,6 +47,18 @@ class Article(models.Model):
             """
             return self.get_queryset().select_related('author', 'category').filter(status='published')
 
+        def detail(self):
+            """
+            Детальная статья (SQL запрос с фильтрацией для страницы со статьёй)
+            добавляем метод detail(), который можем использовать в представлениях, например в DetailView,
+            который оптимизирует SQL запросы.
+            А в представлении DetailView добавляем строку: queryset = model.objects.detail()
+            """
+            return self.get_queryset()\
+                .select_related('author', 'category')\
+                .prefetch_related('comments', 'comments__author', 'comments__author__profile', 'tags')\
+                .filter(status='published')
+
     STATUS_OPTIONS = (
         ('published', 'Опубликовано'),
         ('draft', 'Черновик')
@@ -53,7 +67,7 @@ class Article(models.Model):
     title = models.CharField(verbose_name='Заголовок', max_length=255)
     slug = models.SlugField(verbose_name='URL', max_length=255, blank=True, unique=True)
     short_description = models.TextField(verbose_name='Краткое описание', max_length=500)
-    full_description = RichTextField(verbose_name='Полное описание')
+    full_description = RichTextField(verbose_name='Полное описание', extra_plugins=['codesnippet'],)
     thumbnail = models.ImageField(
         verbose_name='Превью поста',
         blank=True,
@@ -69,6 +83,7 @@ class Article(models.Model):
                                 related_name='updater_posts', blank=True)
     fixed = models.BooleanField(verbose_name='Зафиксировано', default=False)
     category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='articles', verbose_name='Категория')
+    tags = TaggableManager()
 
     objects = ArticleManager()
 
@@ -99,6 +114,9 @@ class Article(models.Model):
         if not self.slug:
             self.slug = unique_slugify(self, self.title)
         super().save(*args, **kwargs)
+
+    def get_objects(self):
+        return self
 
 
 class Category(MPTTModel):
@@ -140,3 +158,40 @@ class Category(MPTTModel):
 
     def get_absolute_url(self):
         return reverse('blog_app:articles_by_category', kwargs={'slug': self.slug})
+
+
+class Comment(MPTTModel):
+    """
+    Модель древовидных комментариев
+    С помощью библиотеки MPTT создаем древовидную систему комментариев.
+    Ссылаемся на Article, так как комментарий закрепляется за статьей.
+    Ссылаемся на User (автора комментария).
+    Добавляем индексы для сортировки, получения оптимизированных результатов.
+    order_insertion_by - сортировка по вложенности
+    """
+
+    STATUS_OPTIONS = (
+        ('published', 'Опубликовано'),
+        ('draft', 'Черновик')
+    )
+
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Статья', related_name='comments')
+    author = models.ForeignKey(User, verbose_name='Автор комментария', on_delete=models.CASCADE, related_name='comments_author')
+    content = models.TextField(verbose_name='Текст комментария', max_length=3000)
+    time_create = models.DateTimeField(verbose_name='Время добавления', auto_now_add=True)
+    time_update = models.DateTimeField(verbose_name='Время обновления', auto_now=True)
+    status = models.CharField(choices=STATUS_OPTIONS, default='published', verbose_name='Статус поста', max_length=10)
+    parent = TreeForeignKey('self', verbose_name='Родительский комментарий', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+
+    class MTTMeta:
+        order_insertion_by = ('-time_create',)
+
+    class Meta:
+        db_table = 'app_comments'
+        indexes = [models.Index(fields=['-time_create', 'time_update', 'status', 'parent'])]
+        ordering = ['-time_create']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f'{self.author}:{self.content}'

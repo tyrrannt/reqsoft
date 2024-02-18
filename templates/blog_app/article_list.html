@@ -60,9 +60,9 @@
                     <div class="sidebar">
                         <h3 class="sidebar-title">Поиск</h3>
                         <div class="sidebar-item search-form">
-                            <form action="">
-                                <input type="text">
-                                <button type="submit"><i class="bi bi-search"></i></button>
+                            <form  role="search" method="get" action="{% url 'blog_app:search' %}">
+                                <input type="search" class="form-control" aria-label="Search" name='do' autocomplete="off" id="search">
+{#                                <button type="submit"><i class="bi bi-search"></i></button>#}
                             </form>
                         </div><!-- End sidebar search formn-->
                         {% load mptt_tags %}
@@ -84,20 +84,22 @@
                             {% for item in object_list %}
                                 <div class="post-item clearfix">
                                     <img src="{% if post.thumbnail %}{{ post.thumbnail }}{% endif %}" alt="">
-                                    <h4><a href="blog-single.html">{{ item.title }}</a></h4>
+                                    <h4><a href="{% url 'blog_app:article_detail' item.slug %}">{{ item.title }}</a></h4>
                                     <time datetime="2020-01-01">{{ item.time_create }}</time>
                                 </div>
                             {% endfor %}
                         </div><!-- End sidebar recent posts-->
-
+                        {% load mptt_tags blog_tags %}
                         <h3 class="sidebar-title">Теги</h3>
                         <div class="sidebar-item tags">
-                            <ul>
-                                <li><a href="#">App</a></li>
-                                <li><a href="#">IT</a></li>
-                            </ul>
+                                <div class="sidebar-item tags">
+                                    <ul>{% popular_tags as tag_list %}
+                                        {% for tag in tag_list %}
+                                    <li><a href="{% url 'blog_app:articles_by_tags' tag.slug %}">{{ tag.name }} ({{ tag.num_times }})</a></li>{% empty %}
+				                    <li>Популярных тегов не найдено.</li> {% endfor %}</ul>
+                                </div><!-- End sidebar tags-->
                         </div><!-- End sidebar tags-->
-
+                        {% show_latest_comments count=5 %}
                     </div><!-- End sidebar -->
 
                 </div><!-- End blog sidebar -->

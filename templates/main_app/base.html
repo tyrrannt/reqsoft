@@ -44,6 +44,7 @@
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto active" href="{% url 'main_app:index' %}">ГЛАВНАЯ</a></li>
+                    {% if request.user.is_authenticated %}
                     <li class="dropdown"><a href="{% url 'blog_app:article_list' %}">СТАТЬИ <i class="bi bi-chevron-down"></i></a>
                     {% load mptt_tags %}
                     {% full_tree_for_model blog_app.Category as categories %}
@@ -68,21 +69,20 @@
 {#                            </li>#}
                         </ul>
                     </li>
+
                     <li class="dropdown megamenu"><a href="#"><span>ПРОФИЛЬ</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li>
-                                {% if user.is_anonimous %}
-                                <a href="#">Вход</a>
-                                {% endif %}
-                                {% if request.user.is_authenticated %}
-{#                                <a href="{% url 'customeuser_app:profile_detail' user.slug %}">Мой профиль</a>#}
-                                <a href="{% url 'blog_app:articles_create' %}">Добавить статью</a>
-                                <a href="{% url 'customeuser_app:logout' %}">Выход</a>
-                                {% endif %}
+                                <a href="{% url 'customeuser_app:profile_detail' user.pk %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Мой профиль</a>
+                                <a href="{% url 'blog_app:articles_create' %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Добавить статью</a>
+                                <form method="post" action="{% url 'customeuser_app:logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="w-100 submit-button btn btn-info btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Выход</button>
+                                </form>
                             </li>
                         </ul>
                     </li>
-
+                    {% endif %}
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
@@ -183,6 +183,8 @@
 
 <!-- Template Main JS File -->
 <script src="{% static 'assets/js/main.js' %}"></script>
+
+{% block script %}{% endblock %}
 
 </body>
 

@@ -55,7 +55,7 @@ class ProfileUpdateView(UpdateView):
         return super(ProfileUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('customeuser_app:profile_detail', kwargs={'slug': self.object.slug})
+        return reverse_lazy('customeuser_app:profile_detail', kwargs={'pk': self.object.pk})
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
@@ -87,11 +87,12 @@ class UserPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('profile_detail', kwargs={'slug': self.request.user.profile.slug})
+        return reverse_lazy('profile_detail', kwargs={'pk': self.request.user.pk})
 
 
-class UserLogoutView(LogoutView):
+class UserLogoutView(SuccessMessageMixin, LogoutView):
     """
-    Выход с сайта
+    Выход из аккаунта
     """
-    next_page = 'main_app:index'
+    next_page = 'blog_app:article_list'
+    success_message = 'Вы вышли из аккаунта!'

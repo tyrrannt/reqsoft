@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'mptt',
     'debug_toolbar',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -165,6 +166,9 @@ CKEDITOR_CONFIGS = {
                 "attributes": {'class': 'lead'},
             },
         ],
+        'extraPlugins': ','.join([
+            'codesnippet',
+        ]),
     },
 }
 
@@ -174,3 +178,4 @@ CKEDITOR_CONFIGS = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/users/login/"
+LOGOUT_REDIRECT_URL = '/'

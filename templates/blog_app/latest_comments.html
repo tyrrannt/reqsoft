@@ -1,0 +1,17 @@
+<div class="blog-comments">
+    <h4 class="comments-count">Последние комментарии</h4>
+    {% for comment in comments %}
+    <div id="comment-{{ comment.pk }}" class="comment">
+        <div class="d-inline-flex">
+            <div class="comment-img"><img src="assets/img/blog/comments-1.jpg" alt=""></div>
+            <div style="overflow: hidden">
+                <h5><a href="">{{ comment.author }}</a></h5>
+                <time datetime="2020-01-01">{{ comment.time_create }}</time>
+                <p style="word-break: break-all;">
+                    {{ comment.content|striptags }}
+                </p>
+            </div>
+        </div>
+    </div><!-- End comment #1 -->
+    {% endfor %}
+</div>

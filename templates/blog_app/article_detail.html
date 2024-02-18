@@ -80,92 +80,7 @@
                                     <i class="bx bx-trash text-4 me-2"></i> Удалить </a>
                             </div>
                         </div><!-- End blog author bio -->
-                        <div class="blog-comments">
-                            <h4 class="comments-count">8 Комментариев</h4>
-                            {#              <div id="comment-1" class="comment">#}
-                            {#                <div class="d-flex">#}
-                            {#                  <div class="comment-img"><img src="assets/img/blog/comments-1.jpg" alt=""></div>#}
-                            {#                  <div>#}
-                            {#                    <h5><a href="">Georgia Reader</a> <a href="#" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>#}
-                            {#                    <time datetime="2020-01-01">01 Jan, 2020</time>#}
-                            {#                    <p>#}
-                            {#                      Et rerum totam nisi. Molestiae vel quam dolorum vel voluptatem et et. Est ad aut sapiente quis molestiae est qui cum soluta.#}
-                            {#                      Vero aut rerum vel. Rerum quos laboriosam placeat ex qui. Sint qui facilis et.#}
-                            {#                    </p>#}
-                            {#                  </div>#}
-                            {#                </div>#}
-                            {#              </div><!-- End comment #1 -->#}
-                            {##}
-                            {#              <div id="comment-2" class="comment">#}
-                            {#                <div class="d-flex">#}
-                            {#                  <div class="comment-img"><img src="assets/img/blog/comments-2.jpg" alt=""></div>#}
-                            {#                  <div>#}
-                            {#                    <h5><a href="">Aron Alvarado</a> <a href="#" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>#}
-                            {#                    <time datetime="2020-01-01">01 Jan, 2020</time>#}
-                            {#                    <p>#}
-                            {#                      Ipsam tempora sequi voluptatem quis sapiente non. Autem itaque eveniet saepe. Officiis illo ut beatae.#}
-                            {#                    </p>#}
-                            {#                  </div>#}
-                            {#                </div>#}
-                            {##}
-                            {#                <div id="comment-reply-1" class="comment comment-reply">#}
-                            {#                  <div class="d-flex">#}
-                            {#                    <div class="comment-img"><img src="assets/img/blog/comments-3.jpg" alt=""></div>#}
-                            {#                    <div>#}
-                            {#                      <h5><a href="">Lynda Small</a> <a href="#" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>#}
-                            {#                      <time datetime="2020-01-01">01 Jan, 2020</time>#}
-                            {#                      <p>#}
-                            {#                        Enim ipsa eum fugiat fuga repellat. Commodi quo quo dicta. Est ullam aspernatur ut vitae quia mollitia id non. Qui ad quas nostrum rerum sed necessitatibus aut est. Eum officiis sed repellat maxime vero nisi natus. Amet nesciunt nesciunt qui illum omnis est et dolor recusandae.#}
-                            {##}
-                            {#                        Recusandae sit ad aut impedit et. Ipsa labore dolor impedit et natus in porro aut. Magnam qui cum. Illo similique occaecati nihil modi eligendi. Pariatur distinctio labore omnis incidunt et illum. Expedita et dignissimos distinctio laborum minima fugiat.#}
-                            {##}
-                            {#                        Libero corporis qui. Nam illo odio beatae enim ducimus. Harum reiciendis error dolorum non autem quisquam vero rerum neque.#}
-                            {#                      </p>#}
-                            {#                    </div>#}
-                            {#                  </div>#}
-                            {##}
-                            {#                  <div id="comment-reply-2" class="comment comment-reply">#}
-                            {#                    <div class="d-flex">#}
-                            {#                      <div class="comment-img"><img src="assets/img/blog/comments-4.jpg" alt=""></div>#}
-                            {#                      <div>#}
-                            {#                        <h5><a href="">Sianna Ramsay</a> <a href="#" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>#}
-                            {#                        <time datetime="2020-01-01">01 Jan, 2020</time>#}
-                            {#                        <p>#}
-                            {#                          Et dignissimos impedit nulla et quo distinctio ex nemo. Omnis quia dolores cupiditate et. Ut unde qui eligendi sapiente omnis ullam. Placeat porro est commodi est officiis voluptas repellat quisquam possimus. Perferendis id consectetur necessitatibus.#}
-                            {#                        </p>#}
-                            {#                      </div>#}
-                            {#                    </div>#}
-                            {##}
-                            {#                  </div><!-- End comment reply #2-->#}
-                            {##}
-                            {#                </div><!-- End comment reply #1-->#}
-                            {##}
-                            {#              </div><!-- End comment #2-->#}
-
-                            <div class="reply-form">
-                                <h4>Новый комментарий</h4>
-                                <p>Ваш адрес электронной почты не будет опубликован. Поля, обязательные для заполнения,
-                                    помечены * </p>
-                                <form action="">
-                                    <div class="row">
-                                        <div class="col-md-6 form-group">
-                                            <input name="name" type="text" class="form-control" placeholder="Ваше имя*">
-                                        </div>
-                                        <div class="col-md-6 form-group">
-                                            <input name="email" type="text" class="form-control"
-                                                   placeholder="Ваш Email*">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col form-group">
-                                            <textarea name="comment" class="form-control"
-                                                      placeholder="Текст комментария *"></textarea>
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Оставить комментарий</button>
-                                </form>
-                            </div>
-                        </div><!-- End blog comments -->
+                        {% include 'blog_app/comments_list.html' %}
                     </div><!-- End blog entries list -->
                     <div class="col-lg-4">
                         <div class="sidebar">
@@ -189,23 +104,24 @@
                                     {% endrecursetree %}
                                 </ul>
                             </div><!-- End sidebar categories-->
-                            <h3 class="sidebar-title">Последние статьи</h3>
+                            <h3 class="sidebar-title">Похожие статьи</h3>
                             <div class="sidebar-item recent-posts">
-                                {% for item in object_list %}
+                                {% for item in similar_articles %}
                                     <div class="post-item clearfix">
                                         <img src="{% if post.thumbnail %}{{ post.thumbnail }}{% endif %}" alt="">
-                                        <h4><a href="blog-single.html">{{ item.title }}</a></h4>
+                                        <h4><a href="{% url 'blog_app:article_detail' item.slug %}">{{ item.title }}</a>
+                                        </h4>
                                         <time datetime="2020-01-01">{{ item.time_create }}</time>
                                     </div>
                                 {% endfor %}
                             </div><!-- End sidebar recent posts-->
                             <h3 class="sidebar-title">Теги</h3>
-                            <div class="sidebar-item tags">
-                                <ul>
-                                    <li><a href="#">App</a></li>
-                                    <li><a href="#">IT</a></li>
-                                </ul>
-                            </div><!-- End sidebar tags-->
+                            {% if article.tags.all %}
+                                <div class="sidebar-item tags">
+                                    <ul>{% for tag in article.tags.all %}
+                                    <li><a href="{% url 'blog_app:articles_by_tags' tag.slug %}">{{ tag }}</a></li> {% endfor %}</ul>
+                                </div><!-- End sidebar tags-->
+                            {% endif %}
                         </div><!-- End sidebar -->
                     </div><!-- End blog sidebar -->
                 </div>

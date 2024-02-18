@@ -50,7 +50,7 @@ class Profile(models.Model):
         """
         Ссылка на профиль
         """
-        return reverse('customeuser_app:profile_detail', kwargs={'slug': self.slug})
+        return reverse('customeuser_app:profile_detail', kwargs={'pk': self.pk})
 
     @property
     def get_avatar(self):
