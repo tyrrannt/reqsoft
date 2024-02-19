@@ -57,11 +57,12 @@
                                     <li><a href="#">{{ object.category }}</a></li>
                                 </ul>
                                 <i class="bi bi-tags"></i>
+                                {% if article.tags.all %}
                                 <ul class="tags">
-                                    <li><a href="#">Creative</a></li>
-                                    <li><a href="#">Tips</a></li>
-                                    <li><a href="#">Marketing</a></li>
-                                </ul>
+                                    {% for tag in article.tags.all %}
+                                    <li><a href="{% url 'blog_app:articles_by_tags' tag.slug %}">{{ tag }}</a></li> {% endfor %}
+                                </ul><!-- End sidebar tags-->
+                                {% endif %}                               
                             </div>
                         </article><!-- End blog entry -->
                         <div class="blog-author d-flex align-items-center">
