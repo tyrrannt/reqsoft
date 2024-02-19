@@ -32,13 +32,11 @@
                             <div class="entry-meta">
                                 <ul>
                                     <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
-                                            href="blog-single.html">{{ post.author }}</a></li>
+                                            href="{% url 'customeuser_app:profile_detail' post.author.pk %}">{{ post.author }}</a></li>
                                     <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
-                                            href="blog-single.html">
-                                        <time datetime="2020-01-01">{{ post.time_create }}</time>
+                                            href="{{ post.get_absolute_url }}">
+                                        <time datetime="2020-01-01">{{ post.time_create | date:"d.m.Y H:i" }}</time>
                                     </a></li>
-                                    <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a
-                                            href="blog-single.html">12 Comments</a></li>
                                 </ul>
                             </div>
                             <div class="entry-content">
@@ -62,7 +60,6 @@
                         <div class="sidebar-item search-form">
                             <form  role="search" method="get" action="{% url 'blog_app:search' %}">
                                 <input type="search" class="form-control" aria-label="Search" name='do' autocomplete="off" id="search">
-{#                                <button type="submit"><i class="bi bi-search"></i></button>#}
                             </form>
                         </div><!-- End sidebar search formn-->
                         {% load mptt_tags %}

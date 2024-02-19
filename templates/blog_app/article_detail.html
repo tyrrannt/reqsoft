@@ -1,4 +1,5 @@
 {% extends 'main_app/base.html' %}
+{% load blog_tags %}
 {% load static %}
 
 {% block Breadcrumbs %}
@@ -33,19 +34,19 @@
                             <div class="entry-meta">
                                 <ul>
                                     <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
-                                            href="blog-single.html">{{ object.author }}</a></li>
+                                            href="{% url 'customeuser_app:profile_detail' object.author.pk %}">{{ object.author }}</a></li>
                                     <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
-                                            href="blog-single.html">
-                                        <time datetime="2020-01-01">{{ object.time_create }}</time>
+                                            href="#">
+                                        <time datetime="2020-01-01">{{ object.time_create | date:"d.m.Y H:i" }}</time>
                                     </a></li>
                                     {% if object.time_update %}
                                         <li class="d-flex align-items-center"><i class="ri-file-edit-line"></i> <a
-                                                href="blog-single.html">
-                                            <time datetime="2020-01-01">{{ object.time_update }}</time>
+                                                href="#">
+                                            <time datetime="2020-01-01">{{ object.time_update | date:"d.m.Y H:i" }}</time>
                                         </a></li>
                                     {% endif %}
                                     <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a
-                                            href="blog-single.html">12 Comments</a></li>
+                                            href="#article_comment">{% get_count_comments article=object %} Comments</a></li>
                                 </ul>
                             </div>
                             <div class="entry-content">
@@ -54,7 +55,7 @@
                             <div class="entry-footer">
                                 <i class="bi bi-folder"></i>
                                 <ul class="cats">
-                                    <li><a href="#">{{ object.category }}</a></li>
+                                    <li><a href="{% url 'blog_app:articles_by_category' object.category.slug %}">{{ object.category }}</a></li>
                                 </ul>
                                 <i class="bi bi-tags"></i>
                                 {% if article.tags.all %}

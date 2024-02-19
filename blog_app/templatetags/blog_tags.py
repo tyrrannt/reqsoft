@@ -2,7 +2,7 @@ from django import template
 from django.db.models import Count
 from taggit.models import Tag
 
-from blog_app.models import Comment
+from blog_app.models import Comment, Article
 
 register = template.Library()
 
@@ -45,3 +45,7 @@ def show_latest_comments(count=5):
     """
     comments = Comment.objects.select_related('author').filter(status='published').order_by('-time_create')[:count]
     return {'comments': comments}
+
+@register.simple_tag()
+def get_count_comments(article):
+    return article.comments.count()
