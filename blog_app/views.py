@@ -11,12 +11,24 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from taggit.models import Tag
 
-from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm
+from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm, CategoryCreateForm
 from blog_app.models import Article, Category, Comment
 from main_app.mixins import AuthorRequiredMixin
 
 
 # Create your views here.
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = ' - Список категорий'
+
+
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    model = Category
+    form_class = CategoryCreateForm
 
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
@@ -24,7 +36,7 @@ class ArticleListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category = Category.objects.all().values_list('title', flat=True)
+        # category = Category.objects.all().values_list('title', flat=True)
         context['title'] = ' - Список статей'
         return context
 

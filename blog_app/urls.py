@@ -12,6 +12,7 @@ urlpatterns = [
     path('articles/<str:slug>/delete/', views.ArticleDeleteView.as_view(), name='article_delete'),
     path('articles/<int:pk>/comments/create/', CommentCreateView.as_view(), name='comment_create_view'),
     path('articles/tags/<str:tag>/', ArticleByTagListView.as_view(), name='articles_by_tags'),
+    path('category/create/', views.CategoryCreateView.as_view(), name='category_create'),
     path('category/<str:slug>/', views.ArticleByCategoryListView.as_view(), name="articles_by_category"),
     path('search/', ArticleSearchResultView.as_view(), name='search'),
 ]

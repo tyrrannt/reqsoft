@@ -159,6 +159,14 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         return reverse('blog_app:articles_by_category', kwargs={'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        """
+        Сохранение полей модели при их отсутствии заполнения
+        """
+        if not self.slug:
+            self.slug = unique_slugify(self, self.title)
+        super().save(*args, **kwargs)
+
 
 class Comment(MPTTModel):
     """

@@ -1,7 +1,24 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 
-from .models import Article, Comment
+from .models import Article, Comment, Category
+
+
+class CategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('parent', 'title', 'description')
+
+    def __init__(self, *args, **kwargs):
+        """
+        Обновление стилей формы под Bootstrap
+        """
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
 
 
 class ArticleCreateForm(forms.ModelForm):

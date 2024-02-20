@@ -1,0 +1,49 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+
+{% block Breadcrumbs %}
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li>Blog Single</li>
+            </ol>
+            <h2>Blog Single</h2>
+        </div>
+    </section><!-- End Breadcrumbs -->
+{% endblock %}
+
+{% block Main %}
+    <main id="main">
+        <!-- ======= Blog Single Section ======= -->
+        <section id="blog" class="blog">
+            <div class="container" data-aos="fade-up">
+
+                <div class="row">
+
+                    <div class="card mb-3 border-0 nth-shadow">
+                        <div class="card-body">
+                            <div class="card-title nth-card-title">
+                                <h4>Добавление категории</h4>
+                            </div>
+                            <form method="post" action="{% url 'blog_app:category_create' %}"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.media }}
+                                {{ form.as_p }}
+                                <div class="d-grid gap-2 d-md-block mt-2">
+                                    <button type="submit" class="btn btn-dark">Добавить категорию</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Blog Single Section -->
+
+    </main><!-- End #main -->
+{% endblock %}
