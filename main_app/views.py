@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('blog_app:article_list')
     return render(request, 'main_app/main.html')
 
 

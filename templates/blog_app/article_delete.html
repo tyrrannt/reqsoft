@@ -5,11 +5,11 @@
     <section class="breadcrumbs">
         <div class="container">
             <ol>
-                <li><a href="{% url 'main_app:index' %}">ГЛАВНАЯ</a></li>
-                <li><a href="#">ПОЛЬЗОВАТЕЛИ</a></li>
-                <li>{{ profile.user }}</li>
+                <li><a href="{% url 'blog_app:article_list' %}">Статьи</a></li>
+                <li><a href="{% url 'blog_app:articles_by_category' object.category.slug %}">{{ object.category }}</a>
+                </li>
             </ol>
-            <h2>Профиль пользователя: {{ profile.user }}</h2>
+            <h2>{{ object.title }}</h2>
         </div>
     </section><!-- End Breadcrumbs -->
 {% endblock %}

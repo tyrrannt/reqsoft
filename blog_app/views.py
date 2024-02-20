@@ -83,7 +83,7 @@ class ArticleByCategoryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = Category.objects.all()
-        context['category'] = category
+        context['category'] = self.category
         context['title'] = f' - Статьи из категории: {self.category.title}'
         return context
 
