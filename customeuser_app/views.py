@@ -14,7 +14,7 @@ from django.views.generic import UpdateView, DetailView
 from customeuser_app.forms import ProfileUpdateForm, UserUpdateForm, UserLoginForm, UserPasswordChangeForm, OTPUserForm
 from customeuser_app.models import Profile
 from customeuser_app.utils import return_secret_key, send_otp
-from reqsoft.settings import MEDIA_URL
+from reqsoft.settings import MEDIA_URL, MEDIA_ROOT
 
 
 # Create your views here.
@@ -151,7 +151,6 @@ class OTPUser(LoginRequiredMixin, UpdateView):
         user_obj = self.get_object()
         key = return_secret_key(user_obj.user)
         uri = pyotp.totp.TOTP(key).provisioning_uri(name=str(user_obj.user), issuer_name='REQSOFT_App')
-        qrcode.make(uri).save(f'{key}.png')
-        context['qrcode'] = f'{MEDIA_URL}/{key}.png'
-        print(f'{MEDIA_URL}{key}.png')
+        qrcode.make(uri).save(f'{MEDIA_ROOT}/{key}.png')
+        context['qrcode'] = f'{MEDIA_URL}{key}.png'
         return context
