@@ -1,0 +1,52 @@
+{% extends 'main_app/base.html' %}
+
+{% block Main %}
+    <main id="main">
+        <!-- ======= Breadcrumbs ======= -->
+        <section class="breadcrumbs">
+            <div class="container">
+
+                <ol>
+                    <li><a href="{% url 'main_app:index' %}">ГЛАВНАЯ</a></li>
+                    <li><a href="#">ПОЛЬЗОВАТЕЛИ</a></li>
+                    <li>{{ profile.user }}</li>
+                </ol>
+                <h2>Профиль пользователя: {{ profile.user }}</h2>
+
+            </div>
+        </section><!-- End Breadcrumbs -->
+        <section id="blog" class="blog">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="card-title">
+                                        {{ profile }}
+                                    </h5>
+                                    <form action="{% url 'customeuser_app:otp' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group mb-3">
+                                            <label tabindex="-1">Временный пароль</label>
+                                            <div class="input-group">
+                                                <input name="otp" type="text" class="form-control form-control-lg"/>
+                                                <span class="input-group-text"><i class="bx bx-user text-4"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 text-end">
+                                                <input class="btn btn-primary mt-2 form-control" type="submit"
+                                                       value="войти">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

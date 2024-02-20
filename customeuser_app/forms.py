@@ -90,3 +90,14 @@ class UserPasswordChangeForm(SetPasswordForm):
                 'class': 'form-control',
                 'autocomplete': 'off'
             })
+
+
+class OTPUserForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['user', 'otp']
+
+    def __init__(self, *args, **kwargs):
+        super(OTPUserForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control"

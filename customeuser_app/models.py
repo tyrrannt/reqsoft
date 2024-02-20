@@ -22,6 +22,7 @@ class Profile(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'jpeg'))])
     bio = models.TextField(max_length=500, blank=True, verbose_name='Информация о себе')
     birth_date = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
+    otp = models.BooleanField(verbose_name='Двухфакторная авторизация', default=False)
 
     class Meta:
         """

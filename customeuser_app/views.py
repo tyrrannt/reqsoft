@@ -1,11 +1,20 @@
+import pyotp
+import qrcode
+from django.contrib import auth
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DetailView
 
-from customeuser_app.forms import ProfileUpdateForm, UserUpdateForm, UserLoginForm, UserPasswordChangeForm
+from customeuser_app.forms import ProfileUpdateForm, UserUpdateForm, UserLoginForm, UserPasswordChangeForm, OTPUserForm
 from customeuser_app.models import Profile
+from customeuser_app.utils import return_secret_key, send_otp
+from reqsoft.settings import MEDIA_URL
 
 
 # Create your views here.
@@ -72,6 +81,19 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         context['title'] = ' - Авторизация на сайте'
         return context
 
+    def form_valid(self, form):
+        user = form.get_user()
+        profile = get_object_or_404(Profile, user=user)
+        if profile.otp:
+            self.request.session['username'] = user.username
+            send_otp(self.request)
+            return redirect('customeuser_app:otp')
+        else:
+            auth.login(self.request, form.get_user())
+            portal_session = 3600
+            self.request.session.set_expiry(portal_session)
+            return HttpResponseRedirect(self.get_success_url())
+
 
 class UserPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     """
@@ -96,3 +118,40 @@ class UserLogoutView(SuccessMessageMixin, LogoutView):
     """
     next_page = 'blog_app:article_list'
     success_message = 'Вы вышли из аккаунта!'
+
+
+def otp_compare(request):
+    error_message = None
+    if request.method == 'POST':
+        otp = request.POST['otp']
+        username = request.session['username']
+        otp_secret_key = request.session['otp_secret_key']
+        if otp_secret_key is not None:
+            totp = pyotp.TOTP(otp_secret_key)
+            if totp.verify(otp):
+                user_obj = get_object_or_404(User, username=username)
+                auth.login(request, user_obj)
+                del request.session['otp_secret_key']
+                return HttpResponseRedirect(reverse_lazy('customeuser_app:profile_detail', args=(user_obj.pk,)))
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
+    return render(request, 'customeuser_app/otp.html')
+
+
+class OTPUser(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = OTPUserForm
+
+    def get_context_data(self, **kwargs):
+        context = super(OTPUser, self).get_context_data(**kwargs)
+        user_obj = self.get_object()
+        key = return_secret_key(user_obj.user)
+        uri = pyotp.totp.TOTP(key).provisioning_uri(name=str(user_obj.user), issuer_name='REQSOFT_App')
+        qrcode.make(uri).save(f'{key}.png')
+        context['qrcode'] = f'{MEDIA_URL}/{key}.png'
+        print(f'{MEDIA_URL}{key}.png')
+        return context

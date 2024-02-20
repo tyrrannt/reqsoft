@@ -44,6 +44,8 @@
                                            class="btn btn-sm btn-primary">Редактировать профиль</a>
                                         <a href="{% url 'customeuser_app:password_change' %}"
                                            class="btn btn-sm btn-danger">Изменить пароль</a>
+                                        <a href="{% url 'customeuser_app:otp_active' object.pk %}"
+                                           class="btn btn-sm btn-danger">Включить двухфакторную авторизацию</a>
                                     </div>
                                 </div>
                             </div>
