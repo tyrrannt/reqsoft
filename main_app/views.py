@@ -44,6 +44,7 @@ def tr_handler403(request, exception):
 @require_GET
 def get_challenge(request, file_name=None):
     lines = []
+    print(f'{BASE_DIR}/static/.well-known/acme-challenge/{file_name}')
     if file_name:
         path = f'{BASE_DIR}/static/.well-known/acme-challenge/{file_name}'
     try:
