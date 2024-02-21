@@ -17,6 +17,20 @@
 {% block Main %}
     <main id="main">
         <section id="blog" class="blog">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ field.label }}</strong>: {{ error|escape }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ field.label }}</strong>: {{ error|escape }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <div class="container" data-aos="fade-up">
                 <div class="row">
                     <div class="card mb-3 border-0 nth-shadow">
@@ -25,14 +39,23 @@
                                 <h4>Изменение профиля</h4>
                             </div>
                             <div class="card-title nth-card-title">
+                                {% if object.otp %}
+                                    <h4 class="title text-uppercase font-weight-bold m-0"><i
+                                        class="bx bx-user-circle me-1 text-6 position-relative top-5"></i> Выключение
+                                    двухфакторной авторизации
+                                </h4>
+                                {% else %}
                                 <h4 class="title text-uppercase font-weight-bold m-0"><i
                                         class="bx bx-user-circle me-1 text-6 position-relative top-5"></i> Включение
                                     двухфакторной авторизации
                                 </h4>
+                                {% endif %}
                             </div>
+                            {% if not object.otp %}
                             <div class="card-title-sign mt-3 text-end">
                                 <img src="{{ qrcode }}">
                             </div>
+                            {% endif %}
                             <form action="{% url 'customeuser_app:otp_active' user.pk %}" method="post"
                                   enctype="multipart/form-data">
                                 {% csrf_token %}

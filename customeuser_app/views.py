@@ -152,7 +152,7 @@ class OTPUser(LoginRequiredMixin, UpdateView):
         user_obj = self.get_object()
         key = return_secret_key(user_obj.user)
         totp = pyotp.TOTP(key)
-        print(totp.now())
+        # print(totp.now())
         uri = pyotp.totp.TOTP(key).provisioning_uri(name=str(user_obj.user), issuer_name='REQSOFT_App')
         qrcode.make(uri).save(f'{MEDIA_ROOT}/{key}.png')
         context['qrcode'] = f'{MEDIA_URL}{key}.png'
@@ -160,14 +160,21 @@ class OTPUser(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         user = self.get_object()
-        key = return_secret_key(user.username)
+        key = return_secret_key(user.user)
         totp = pyotp.TOTP(key)
+
         otp = form.cleaned_data['otp_code']
         if otp == totp.now():
-            user.otp = True
+            user.otp = False if user.otp else True
             user.save()
             return HttpResponseRedirect(reverse_lazy('customeuser_app:profile_detail', args=(user.pk,)))
         else:
+            # print(totp.now(), user)
             form.add_error('otp', 'Неправильный код')
             return self.form_invalid(form)
         return super(OTPUser, self).form_valid(form)
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs['user'] = self.request.user
+    #     return kwargs

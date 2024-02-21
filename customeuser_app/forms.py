@@ -93,11 +93,13 @@ class UserPasswordChangeForm(SetPasswordForm):
 
 
 class OTPUserForm(forms.ModelForm):
+    otp_code = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = Profile
-        fields = ['user', 'otp']
+        fields = ['otp', 'otp_code']
 
     def __init__(self, *args, **kwargs):
+        # self.username = kwargs.pop('user', None)
         super(OTPUserForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
@@ -106,3 +108,10 @@ class OTPUserForm(forms.ModelForm):
             'type': 'checkbox',
             'role': 'switch'
         })
+
+    def clean(self):
+        cleaned_data = super(OTPUserForm, self).clean()
+        otp = cleaned_data.get('otp')
+        self.otp_code = cleaned_data.get('otp')
+        # self.user = User.objects.get(username=self.username)
+        return cleaned_data
