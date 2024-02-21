@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET
 
-
 from reqsoft.settings import BASE_DIR
 
 
@@ -40,6 +39,7 @@ def tr_handler403(request, exception):
         'title': 'Ошибка доступа: 403',
         'error_message': 'Доступ к этой странице ограничен',
     })
+
 
 @require_GET
 def get_challenge(request, file_name=None):
