@@ -46,7 +46,7 @@ class Article(models.Model):
             Список статей (SQL запрос с фильтрацией для страницы списка статей)
             """
             return (self.get_queryset().select_related('author', 'category')
-                    .prefetch_related('ratings', 'views').filter(status='published'))
+                    .prefetch_related('views').filter(status='published'))
 
         def detail(self):
             """
