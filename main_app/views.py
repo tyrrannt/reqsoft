@@ -54,3 +54,4 @@ def get_challenge(request, file_name=None):
         return HttpResponse("File not found!")
 
     return HttpResponse("".join(lines), content_type="text/plain")
+
