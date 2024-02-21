@@ -35,6 +35,7 @@
                             </div>
                             <form action="{% url 'customeuser_app:otp_active' user.pk %}" method="post"
                                   enctype="multipart/form-data">
+                                {% csrf_token %}
                                 <div class="form-group mb-3">
                                     <label tabindex="-1">Временный пароль</label>
                                     <div class="input-group">
