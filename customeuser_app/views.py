@@ -152,6 +152,7 @@ class OTPUser(LoginRequiredMixin, UpdateView):
         user_obj = self.get_object()
         key = return_secret_key(user_obj.user)
         uri = pyotp.totp.TOTP(key).provisioning_uri(name=str(user_obj.user), issuer_name='REQSOFT_App')
+        print()
         qrcode.make(uri).save(f'{MEDIA_ROOT}/{key}.png')
         context['qrcode'] = f'{MEDIA_URL}{key}.png'
         return context

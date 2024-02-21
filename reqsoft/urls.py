@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from reqsoft import settings
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('users/', include('customeuser_app.urls')),
     path('blog/', include('blog_app.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('.well-known/', include('main_app.urls')),
 ]
 
 if settings.DEBUG:
