@@ -28,7 +28,6 @@
                                 {% csrf_token %}
                                 {{ user_form.as_p }}
                                 {{ form.as_p }}
-                                <img src="{{ qrcode }}">
                                 <div class="d-grid gap-2 d-md-block mt-2">
                                     <button type="submit" class="btn btn-dark">Подтвердить изменение профиля</button>
                                 </div>

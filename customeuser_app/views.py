@@ -145,6 +145,7 @@ def otp_compare(request):
 class OTPUser(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = OTPUserForm
+    template_name = 'customeuser_app/otp_active.html'
 
     def get_context_data(self, **kwargs):
         context = super(OTPUser, self).get_context_data(**kwargs)

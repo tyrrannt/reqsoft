@@ -101,3 +101,8 @@ class OTPUserForm(forms.ModelForm):
         super(OTPUserForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
+        self.fields['otp'].widget.attrs.update({
+            'class': 'form-check-input',
+            'type': 'checkbox',
+            'role': 'switch'
+        })

@@ -1,0 +1,61 @@
+{% extends 'main_app/base.html' %}
+
+{% block Breadcrumbs %}
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{% url 'main_app:index' %}">ГЛАВНАЯ</a></li>
+                <li><a href="#">ПОЛЬЗОВАТЕЛИ</a></li>
+                <li>{{ profile.user }}</li>
+            </ol>
+            <h2>Профиль пользователя: {{ profile.user }}</h2>
+        </div>
+    </section><!-- End Breadcrumbs -->
+{% endblock %}
+
+{% block Main %}
+    <main id="main">
+        <section id="blog" class="blog">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <div class="card mb-3 border-0 nth-shadow">
+                        <div class="card-body">
+                            <div class="card-title nth-card-title">
+                                <h4>Изменение профиля</h4>
+                            </div>
+                            <div class="card-title nth-card-title">
+                                <h4 class="title text-uppercase font-weight-bold m-0"><i
+                                        class="bx bx-user-circle me-1 text-6 position-relative top-5"></i> Включение
+                                    двухфакторной авторизации
+                                </h4>
+                            </div>
+                            <div class="card-title-sign mt-3 text-end">
+                                <img src="{{ qrcode }}">
+                            </div>
+                            <form action="{% url 'customeuser_app:otp_active' user.pk %}" method="post"
+                                  enctype="multipart/form-data">
+                                <div class="form-group mb-3">
+                                    <label tabindex="-1">Временный пароль</label>
+                                    <div class="input-group">
+                                        {{ form.otp }}
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <input name="otp_code" type="text" class="form-control form-control-lg"/>
+                                        <span class="input-group-text"><i class="bx bx-user text-4"></i></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-end">
+                                        <input class="btn btn-primary mt-2 form-control" type="submit" value="войти">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
