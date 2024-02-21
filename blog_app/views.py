@@ -12,6 +12,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from taggit.models import Tag
 
 from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm, CategoryCreateForm
+from blog_app.mixins import ViewCountMixin
 from blog_app.models import Article, Category, Comment
 from main_app.mixins import AuthorRequiredMixin
 
@@ -41,7 +42,7 @@ class ArticleListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ArticleDetailView(LoginRequiredMixin, DetailView):
+class ArticleDetailView(LoginRequiredMixin, ViewCountMixin, DetailView):
     model = Article
     queryset = model.objects.detail()
 

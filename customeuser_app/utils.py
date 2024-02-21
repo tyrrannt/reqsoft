@@ -19,3 +19,12 @@ def send_otp(request):
     otp = totp.now()
     request.session['otp_secret_key'] = totp.secret
     print(f'Your one time password is {otp}')
+
+
+def get_client_ip(request):
+    """
+    Get user's IP
+    """
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
+    return ip

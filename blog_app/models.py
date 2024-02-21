@@ -118,6 +118,12 @@ class Article(models.Model):
     def get_objects(self):
         return self
 
+    def get_view_count(self):
+        """
+        Возвращает количество просмотров для данной статьи
+        """
+        return self.views.count()
+
 
 class Category(MPTTModel):
     """
@@ -203,3 +209,28 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return f'{self.author}:{self.content}'
+
+
+class ViewCount(models.Model):
+    """
+    Модель просмотров для статей
+    article - это внешний ключ, связывающий просмотр с соответствующей статьей.
+    ip_address - это поле для хранения IP-адреса пользователя, который просмотрел статью.
+    viewed_on - это поле для хранения даты и времени просмотра статьи.
+    Мы также определяем два дополнительных параметра для нашей модели: Meta и str(). Параметр Meta содержит информацию
+    о сортировке и индексировании модели, а также о ее имени и множественном числе для отображения в административном
+    интерфейсе. Параметр str() определяет строковое представление объекта модели, которое будет отображаться в
+    административном интерфейсе.
+    """
+    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='views')
+    ip_address = models.GenericIPAddressField(verbose_name='IP адрес')
+    viewed_on = models.DateTimeField(auto_now_add=True, verbose_name='Дата просмотра')
+
+    class Meta:
+        ordering = ('-viewed_on',)
+        indexes = [models.Index(fields=['-viewed_on'])]
+        verbose_name = 'Просмотр'
+        verbose_name_plural = 'Просмотры'
+
+    def __str__(self):
+        return self.article.title

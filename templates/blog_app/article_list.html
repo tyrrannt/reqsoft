@@ -37,6 +37,8 @@
                                             href="{{ post.get_absolute_url }}">
                                         <time datetime="2020-01-01">{{ post.time_create | date:"d.m.Y H:i" }}</time>
                                     </a></li>
+                                    <li class="d-flex align-items-center"><i class="bi bi-eye"></i> <a
+                                            href="{{ post.get_absolute_url }}">{{ post.get_view_count }}</a></li>
                                 </ul>
                             </div>
                             <div class="entry-content">

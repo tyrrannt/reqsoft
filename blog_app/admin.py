@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Article, Category, Comment
+from .models import Article, Category, Comment, ViewCount
 
 
 # Register your models here.
@@ -35,3 +35,6 @@ class CommentAdminPage(DraggableMPTTAdmin):
     list_filter = ('time_create', 'time_update', 'author')
     list_editable = ('status',)
 
+@admin.register(ViewCount)
+class ViewCountAdmin(admin.ModelAdmin):
+    pass
