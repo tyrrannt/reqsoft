@@ -1,3 +1,5 @@
+from datetime import date
+
 from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
@@ -122,8 +124,21 @@ class Article(models.Model):
     def get_view_count(self):
         """
         Возвращает количество просмотров для данной статьи
+        количество объектов в связанной модели ViewCount через related_name='views', которые относятся к данной
+        статье через внешний ключ
         """
         return self.views.count()
+
+    def get_today_view_count(self):
+        """
+        Возвращает количество просмотров для данной статьи за сегодняшний день
+        возвращает количество просмотров данной статьи за текущий день. Он фильтрует связанные объекты ViewCount, чтобы
+        получить только те, которые были просмотрены сегодня. Это достигается через фильтр viewed_on__date=today,
+        который выбирает только те записи в связанной модели ViewCount, где поле viewed_on равно сегодняшней дате,
+        определенной с помощью date.today(). Затем он возвращает количество отфильтрованных записей.
+        """
+        today = date.today()
+        return self.views.filter(viewed_on__date=today).count()
 
 
 class Category(MPTTModel):

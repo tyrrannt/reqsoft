@@ -1,5 +1,8 @@
+from datetime import timedelta, datetime, date, time
+
 from django import template
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.utils import timezone
 from taggit.models import Tag
 
 from blog_app.models import Comment, Article
@@ -49,3 +52,40 @@ def show_latest_comments(count=5):
 @register.simple_tag()
 def get_count_comments(article):
     return article.comments.count()
+
+@register.simple_tag
+def popular_articles():
+    """
+    Данный код является Django-шаблон тегом. Он выводит список 10 самых популярных статей за последние 7 дней,
+    отсортированных по количеству просмотров за сегодняшний день и за все время.
+
+    Объяснение кода:
+
+    Строки 1-5: импорт необходимых модулей и модели Article.
+    Строка 7: регистрация шаблонного тега в Django.
+    Строки 9-10: получение текущей даты и вычисление даты начала дня 7 дней назад.
+    Строка 12: вычисление даты начала текущего дня.
+    Строка 14: получение всех статей и количества их просмотров за последние 7 дней. Аннотации total_view_count и
+    today_view_count вычисляют общее количество просмотров за 7 дней и количество просмотров за сегодняшний день,
+    соответственно.
+    Строка 15: запрос к связанным объектам - для улучшения производительности используется метод prefetch_related().
+    Строки 17-20: сортировка статей по количеству просмотров, сначала по просмотрам за все время (total_view_count),
+    затем по просмотрам за сегодня (today_view_count). Отбираются первые 10 статей.
+    Строка 22: возвращение списка популярных статей.
+    :return:
+    """
+
+    # получаем текущую дату и время в формате datetime
+    now = timezone.now()
+    # вычисляем дату начала дня (00:00) 7 дней назад
+    start_date = now - timedelta(days=7)
+    # вычисляем дату начала текущего дня (00:00)
+    today_start = timezone.make_aware(datetime.combine(date.today(), time.min))
+    # получаем все статьи и количество их просмотров за последние 7 дней
+    articles = Article.objects.annotate(
+        total_view_count=Count('views', filter=Q(views__viewed_on__gte=start_date)),
+        today_view_count=Count('views', filter=Q(views__viewed_on__gte=today_start))
+    ).prefetch_related('views')
+    # сортируем статьи по количеству просмотров в порядке убывания, сначала по просмотрам за сегодня, затем за все время
+    popular_articles = articles.order_by('-total_view_count', '-today_view_count')[:10]
+    return popular_articles
