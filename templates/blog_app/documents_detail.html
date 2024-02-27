@@ -48,14 +48,7 @@
                             
                             
                             <div class="entry-content">
-                                <object data="{{ object.file }}" type="application/pdf" width="750px"
-                                            height="750px">
-                                        <embed src="{{ object.file }}" type="application/pdf">
-                                        <p>Этот браузер не поддерживает PDF-файлы. Пожалуйста, загрузите PDF-файл, чтобы
-                                            просмотреть его: <a
-                                                    href="{{ object.file }}">Скачать PDF.</a>.</p>
-                                        </embed>
-                                    </object>
+                                <a href="{{ object.file }}">Открыть PDF.</a>.</p>
                             </div>
                             <div class="entry-footer">
                                 <i class="bi bi-folder"></i>
