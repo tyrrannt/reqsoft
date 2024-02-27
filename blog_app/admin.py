@@ -26,7 +26,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Documents)
 class DocumentsAdmin(admin.ModelAdmin):
-    list_display = ('file', 'time_create', 'category')
+    list_display = ('description', 'file', 'time_create', 'category')
 
 
 @admin.register(Comment)
