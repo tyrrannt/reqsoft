@@ -276,3 +276,11 @@ class Documents(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog_app:file_detail', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        """
+        Сохранение полей модели при их отсутствии заполнения
+        """
+        description = self.description
+        self.description = description.replace('_', ' ')
+        super().save(*args, **kwargs)
