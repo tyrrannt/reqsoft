@@ -13,7 +13,7 @@ from taggit.models import Tag
 
 from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm, CategoryCreateForm
 from blog_app.mixins import ViewCountMixin
-from blog_app.models import Article, Category, Comment
+from blog_app.models import Article, Category, Comment, Documents
 from main_app.mixins import AuthorRequiredMixin
 
 
@@ -209,7 +209,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return JsonResponse({'error': 'Необходимо авторизоваться для добавления комментариев'}, status=400)
 
 
-class ArticleSearchResultView(ListView):
+class ArticleSearchResultView(LoginRequiredMixin, ListView):
     """
     Реализация поиска статей на сайте
     """
@@ -228,3 +228,16 @@ class ArticleSearchResultView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = f' - Результаты поиска: {self.request.GET.get("do")}'
         return context
+
+
+class FilesListView(LoginRequiredMixin, ListView):
+    model = Documents
+    paginate_by = 25
+    allow_empty = True
+
+    def get_queryset(self):
+        return Documents.objects.all()
+
+
+class FilesDetailView(LoginRequiredMixin, DetailView):
+    model = Documents

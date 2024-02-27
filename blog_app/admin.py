@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Article, Category, Comment, ViewCount
+from .models import Article, Category, Comment, ViewCount, Documents
 
 
 # Register your models here.
@@ -22,6 +22,11 @@ class CategoryAdmin(DraggableMPTTAdmin):
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+
+
+@admin.register(Documents)
+class DocumentsAdmin(admin.ModelAdmin):
+    list_display = ('file', 'time_create', 'category')
 
 
 @admin.register(Comment)

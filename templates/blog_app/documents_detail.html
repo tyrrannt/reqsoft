@@ -1,0 +1,137 @@
+{% extends 'main_app/base.html' %}
+{% load blog_tags %}
+{% load static %}
+
+{% block Breadcrumbs %}
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{% url 'blog_app:article_list' %}">Статьи</a></li>
+                <li><a href="{% url 'blog_app:articles_by_category' object.category.slug %}">{{ object.category }}</a>
+                </li>
+            </ol>
+            <h2>{{ object.title }}</h2>
+        </div>
+    </section><!-- End Breadcrumbs -->
+{% endblock %}
+
+{% block Main %}
+    <main id="main">
+        <!-- ======= Blog Single Section ======= -->
+        <section id="blog" class="blog">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <div class="col-lg-8 entries">
+                        <article class="entry entry-single">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="entry-img">
+                                <img src="{% if object.thumbnail %}{{ object.thumbnail.url }}{% endif %}" alt=""
+                                     class="img-fluid" style="height: 400px">
+                            </div>
+                            </div>
+                            <div class="col-5">
+                                <h2 class="entry-title">
+                                <a href="{{ post.get_absolute_url }}">{{ object.description }}</a>
+                            </h2>
+                            <div class="entry-meta">
+                                <ul>
+                                    <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
+                                            href="#">
+                                        <time datetime="2020-01-01">{{ object.time_create | date:"d.m.Y" }}</time>
+                                    </a></li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                            
+                            
+                            <div class="entry-content">
+                                <object data="{{ object.file }}" type="application/pdf" width="750px"
+                                            height="750px">
+                                        <embed src="{{ object.file }}" type="application/pdf">
+                                        <p>Этот браузер не поддерживает PDF-файлы. Пожалуйста, загрузите PDF-файл, чтобы
+                                            просмотреть его: <a
+                                                    href="{{ object.file }}">Скачать PDF.</a>.</p>
+                                        </embed>
+                                    </object>
+                            </div>
+                            <div class="entry-footer">
+                                <i class="bi bi-folder"></i>
+                                <ul class="cats">
+                                    <li><a href="{% url 'blog_app:articles_by_category' object.category.slug %}">{{ object.category }}</a></li>
+                                </ul>
+                                <i class="bi bi-tags"></i>
+                                {% if article.tags.all %}
+                                <ul class="tags">
+                                    {% for tag in article.tags.all %}
+                                    <li><a href="{% url 'blog_app:articles_by_tags' tag.slug %}">{{ tag }}</a></li> {% endfor %}
+                                </ul><!-- End sidebar tags-->
+                                {% endif %}                               
+                            </div>
+                        </article><!-- End blog entry -->
+                        <div class="blog-author d-flex align-items-center">
+                            <div class="col-12 col-md-auto px-md-0 mt-3 mt-md-0 mx-2">
+                                <a href="{% url 'blog_app:article_update' object.pk %}"
+                                   class="submit-button btn btn-primary btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1">
+                                    <i class="bx bx-save text-4 me-2"></i> Изменить</a>
+                            </div>
+                            <div class="col-12 col-md-auto px-md-0 mt-3 mt-md-0">
+                                <a href="{% url 'blog_app:files_list' %}"
+                                   class="cancel-button btn btn-light btn-px-4 py-3 border font-weight-semibold text-color-dark text-3">Закрыть</a>
+                            </div>
+                            <div class="col-12 col-md-auto ms-md-auto mt-3 mt-md-0 ms-auto">
+                                <a href="{% url 'blog_app:article_delete' object.pk %}"
+                                   class="delete-button btn btn-danger btn-px-4 py-3 d-flex align-items-center font-weight-semibold line-height-1">
+                                    <i class="bx bx-trash text-4 me-2"></i> Удалить </a>
+                            </div>
+                        </div><!-- End blog author bio -->
+                    </div><!-- End blog entries list -->
+                    <div class="col-lg-4">
+                        <div class="sidebar">
+                            <h3 class="sidebar-title">Поиск</h3>
+                            <div class="sidebar-item search-form">
+                                <form action="">
+                                    <input type="text">
+                                    <button type="submit"><i class="bi bi-search"></i></button>
+                                </form>
+                            </div><!-- End sidebar search formn-->
+                            {% load mptt_tags %}
+                            <h3 class="sidebar-title">Категории</h3>
+                            {% full_tree_for_model blog_app.Category as categories %}
+                            <div class="sidebar-item categories">
+                                <ul>
+                                    {% recursetree categories %}
+                                        <li class="dropdown"><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                                            {% if not node.is_leaf_node %}
+                                                <ul>{% endif %}{{ children }}{% if not node.is_leaf_node %}</li>
+                                                </ul>{% endif %}</li>
+                                    {% endrecursetree %}
+                                </ul>
+                            </div><!-- End sidebar categories-->
+                            <h3 class="sidebar-title">Похожие статьи</h3>
+                            <div class="sidebar-item recent-posts">
+                                {% for item in similar_articles %}
+                                    <div class="post-item clearfix">
+                                        <img src="{% if post.thumbnail %}{{ post.thumbnail }}{% endif %}" alt="">
+                                        <h4><a href="{% url 'blog_app:article_detail' item.slug %}">{{ item.title }}</a>
+                                        </h4>
+                                        <time datetime="2020-01-01">{{ item.time_create }}</time>
+                                    </div>
+                                {% endfor %}
+                            </div><!-- End sidebar recent posts-->
+                            <h3 class="sidebar-title">Теги</h3>
+                            {% if article.tags.all %}
+                                <div class="sidebar-item tags">
+                                    <ul>{% for tag in article.tags.all %}
+                                    <li><a href="{% url 'blog_app:articles_by_tags' tag.slug %}">{{ tag }}</a></li> {% endfor %}</ul>
+                                </div><!-- End sidebar tags-->
+                            {% endif %}
+                        </div><!-- End sidebar -->
+                    </div><!-- End blog sidebar -->
+                </div>
+            </div>
+        </section><!-- End Blog Single Section -->
+    </main><!-- End #main -->
+{% endblock %}

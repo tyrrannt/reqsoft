@@ -250,3 +250,29 @@ class ViewCount(models.Model):
 
     def __str__(self):
         return self.article.title
+
+
+class Documents(models.Model):
+
+    class Meta:
+        verbose_name = 'Файл'
+        verbose_name_plural = 'Файлы'
+        ordering = ['-time_create']
+
+    file = models.URLField(verbose_name='Файл', max_length=255)
+    description = models.CharField(verbose_name='Описание', max_length=255, blank=True)
+    thumbnail = models.ImageField(
+        verbose_name='Превью поста',
+        blank=True,
+        upload_to='images/thumbnails/%Y/%m/%d/',
+        validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))]
+    )
+    time_create = models.DateTimeField(verbose_name='Время добавления', auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', related_name='files')
+
+
+    def __str__(self):
+        return self.file
+
+    def get_absolute_url(self):
+        return reverse('blog_app:file_detail', kwargs={'pk': self.pk})
