@@ -63,7 +63,7 @@
                     {% full_tree_for_model blog_app.Category as categories %}
                         <ul>
                             {% recursetree categories %}
-                                        <li class="dropdown"><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                                        <li class="dropdown"><a href="{{ node.get_absolute_url_files }}">{{ node.title }}</a>
                                             {% if not node.is_leaf_node %}
                                                 <ul>{% endif %}{{ children }}{% if not node.is_leaf_node %}</li>
                                                 </ul>{% endif %}</li>

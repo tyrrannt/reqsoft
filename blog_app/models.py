@@ -181,6 +181,9 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         return reverse('blog_app:articles_by_category', kwargs={'slug': self.slug})
 
+    def get_absolute_url_files(self):
+        return reverse('blog_app:files_by_category', kwargs={'slug': self.slug})
+
     def save(self, *args, **kwargs):
         """
         Сохранение полей модели при их отсутствии заполнения

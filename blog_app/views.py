@@ -254,3 +254,20 @@ class FilesUpdateView(LoginRequiredMixin, UpdateView):
     form_class = FilesUpdateForm
     template_name = 'blog_app/documents_update.html'
     success_message = 'Запись была успешно обновлена'
+
+
+class FilesByCategoryListView(LoginRequiredMixin, ListView):
+    model = Documents
+    category = None
+
+    def get_queryset(self):
+        self.category = Category.objects.get(slug=self.kwargs['slug'])
+        queryset = Documents.objects.all().filter(category__slug=self.category.slug)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.all()
+        context['category'] = self.category
+        context['title'] = f' - Файлы из категории: {self.category.title}'
+        return context
