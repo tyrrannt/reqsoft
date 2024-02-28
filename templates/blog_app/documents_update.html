@@ -27,7 +27,7 @@
                                 <h4>Обновление записи: {{ object.description }}</h4>
                             </div>
                             <div class="entry-content">
-                                <strong>Ссылка: </strong><a href="{{ object.file }}">{{ object.description }}</a>
+                                <strong>Ссылка: </strong><a href="{{ object.file }}" target="_blank">{{ object.description }}</a>
                             </div>
                             <form method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
