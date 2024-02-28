@@ -61,6 +61,23 @@ class FilesCreateForm(forms.ModelForm):
             })
 
 
+class FilesUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Documents
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        """
+        Обновление стилей формы под Bootstrap
+        """
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
+
+
 class ArticleUpdateForm(ArticleCreateForm):
     """
     Форма обновления статьи на сайте

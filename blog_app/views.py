@@ -11,7 +11,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from taggit.models import Tag
 
-from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm, CategoryCreateForm, FilesCreateForm
+from blog_app.forms import ArticleCreateForm, ArticleUpdateForm, CommentCreateForm, CategoryCreateForm, FilesCreateForm, \
+    FilesUpdateForm
 from blog_app.mixins import ViewCountMixin
 from blog_app.models import Article, Category, Comment, Documents
 from main_app.mixins import AuthorRequiredMixin
@@ -246,3 +247,10 @@ class FilesDetailView(LoginRequiredMixin, DetailView):
 class FilesCreateView(LoginRequiredMixin, CreateView):
     model = Documents
     form_class = FilesCreateForm
+
+
+class FilesUpdateView(LoginRequiredMixin, UpdateView):
+    model = Documents
+    form_class = FilesUpdateForm
+    template_name = 'blog_app/documents_update.html'
+    success_message = 'Запись была успешно обновлена'

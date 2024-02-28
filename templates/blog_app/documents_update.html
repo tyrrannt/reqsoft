@@ -1,0 +1,43 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+
+{% block Breadcrumbs %}
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{% url 'blog_app:files_list' %}">Файлы</a></li>
+                <li><a href="{% url 'blog_app:articles_by_category' object.category.slug %}">{{ object.category }}</a>
+                </li>
+            </ol>
+            <h2>{{ object.description }}</h2>
+        </div>
+    </section><!-- End Breadcrumbs -->
+{% endblock %}
+
+{% block Main %}
+    <main id="main">
+        <!-- ======= Blog Single Section ======= -->
+        <section id="blog" class="blog">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <div class="card mb-3 border-0 nth-shadow">
+                        <div class="card-body">
+                            <div class="card-title nth-card-title">
+                                <h4>Обновление записи: {{ object.description }}</h4>
+                            </div>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.media }}
+                                {{ form.as_p }}
+                                <div class="d-grid gap-2 d-md-block mt-2">
+                                    <button type="submit" class="btn btn-dark">Обновить запись</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Blog Single Section -->
+    </main><!-- End #main -->
+{% endblock %}
