@@ -26,6 +26,9 @@
                             <div class="card-title nth-card-title">
                                 <h4>Обновление записи: {{ object.description }}</h4>
                             </div>
+                            <div class="entry-content">
+                                <a href="{% url object.file %}">{{ object.description }}</a>
+                            </div>
                             <form method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{ form.media }}
