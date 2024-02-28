@@ -17,4 +17,5 @@ urlpatterns = [
     path('search/', ArticleSearchResultView.as_view(), name='search'),
     path('files/', views.FilesListView.as_view(), name='files_list'),
     path('files/<int:pk>/', views.FilesDetailView.as_view(), name='file_detail'),
+    path('files/create/', views.FilesCreateView.as_view(), name='file_create'),
 ]

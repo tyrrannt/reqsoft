@@ -79,6 +79,7 @@
                                 <a href="{% url 'customeuser_app:profile_detail' user.pk %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Мой профиль</a>
                                 <a href="{% url 'blog_app:category_create' %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Добавить категорию</a>
                                 <a href="{% url 'blog_app:articles_create' %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Добавить статью</a>
+                                <a href="{% url 'blog_app:file_create' %}" class="w-100 btn btn-light btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Добавить файл</a>
                                 <form method="post" action="{% url 'customeuser_app:logout' %}">
                                     {% csrf_token %}
                                     <button type="submit" class="w-100 submit-button btn btn-info btn-px-4 py-3 mt-2 border font-weight-semibold text-color-dark text-3">Выход</button>

@@ -259,10 +259,10 @@ class Documents(models.Model):
         verbose_name_plural = 'Файлы'
         ordering = ['-time_create']
 
-    file = models.URLField(verbose_name='Файл', max_length=255)
+    file = models.URLField(verbose_name='Ссылка на файл', max_length=255)
     description = models.CharField(verbose_name='Описание', max_length=255, blank=True)
     thumbnail = models.ImageField(
-        verbose_name='Превью поста',
+        verbose_name='Превью файла',
         blank=True,
         upload_to='images/thumbnails/%Y/%m/%d/',
         validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))]
