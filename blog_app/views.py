@@ -1,11 +1,12 @@
 import random
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db import models
 from django.db.models import Count
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -32,7 +33,8 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryCreateForm
 
-class ArticleListView(LoginRequiredMixin, ListView):
+
+class ArticleListView(LoginRequiredMixin, SuccessMessageMixin, ListView):
     model = Article
     paginate_by = 6
 
@@ -73,7 +75,7 @@ class ArticleDetailView(LoginRequiredMixin, ViewCountMixin, DetailView):
         return context
 
 
-class ArticleByCategoryListView(LoginRequiredMixin, ListView):
+class ArticleByCategoryListView(LoginRequiredMixin, SuccessMessageMixin, ListView):
     model = Article
     category = None
 
@@ -90,12 +92,13 @@ class ArticleByCategoryListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ArticleCreateView(LoginRequiredMixin, CreateView):
+class ArticleCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Представление: создание материалов на сайте
     """
     model = Article
     form_class = ArticleCreateForm
+    success_message = 'Статья успешно создана'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,7 +131,7 @@ class ArticleUpdateView(AuthorRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ArticleDeleteView(AuthorRequiredMixin, DeleteView):
+class ArticleDeleteView(AuthorRequiredMixin, SuccessMessageMixin, DeleteView):
     """
     Представление: удаления материала
     """
@@ -136,6 +139,7 @@ class ArticleDeleteView(AuthorRequiredMixin, DeleteView):
     success_url = reverse_lazy('blog_app:article_list')
     context_object_name = 'article'
     template_name = 'blog_app/article_delete.html'
+    success_message = 'Материал был успешно удален'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -160,7 +164,7 @@ class ArticleByTagListView(ListView):
         return context
 
 
-class CommentCreateView(LoginRequiredMixin, CreateView):
+class CommentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Comment
     form_class = CommentCreateForm
 
@@ -223,7 +227,9 @@ class ArticleSearchResultView(LoginRequiredMixin, ListView):
         query = self.request.GET.get('do')
         search_vector = SearchVector('full_description', weight='B') + SearchVector('title', weight='A')
         search_query = SearchQuery(query)
-        return (self.model.objects.annotate(rank=SearchRank(search_vector, search_query)).filter(rank__gte=0.3).order_by('-rank'))
+        return (
+            self.model.objects.annotate(rank=SearchRank(search_vector, search_query)).filter(rank__gte=0.3).order_by(
+                '-rank'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -231,7 +237,7 @@ class ArticleSearchResultView(LoginRequiredMixin, ListView):
         return context
 
 
-class FilesListView(LoginRequiredMixin, ListView):
+class FilesListView(LoginRequiredMixin, SuccessMessageMixin, ListView):
     model = Documents
     paginate_by = 25
     allow_empty = True
@@ -240,23 +246,24 @@ class FilesListView(LoginRequiredMixin, ListView):
         return Documents.objects.all()
 
 
-class FilesDetailView(LoginRequiredMixin, DetailView):
+class FilesDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
     model = Documents
 
 
-class FilesCreateView(LoginRequiredMixin, CreateView):
+class FilesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Documents
     form_class = FilesCreateForm
+    success_message = 'Документ успешно создан'
 
 
-class FilesUpdateView(LoginRequiredMixin, UpdateView):
+class FilesUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Documents
     form_class = FilesUpdateForm
     template_name = 'blog_app/documents_update.html'
     success_message = 'Запись была успешно обновлена'
 
 
-class FilesByCategoryListView(LoginRequiredMixin, ListView):
+class FilesByCategoryListView(LoginRequiredMixin, SuccessMessageMixin, ListView):
     model = Documents
     category = None
 
@@ -270,4 +277,16 @@ class FilesByCategoryListView(LoginRequiredMixin, ListView):
         category = Category.objects.all()
         context['category'] = self.category
         context['title'] = f' - Файлы из категории: {self.category.title}'
+        return context
+
+
+class FilesDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Documents
+    success_message = 'Файл был успешно удален'
+    success_url = reverse_lazy('blog_app:files_list')
+    template_name = 'blog_app/documents_delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f' - Удаление файла: {self.get_object().description}'
         return context
