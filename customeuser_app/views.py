@@ -28,7 +28,7 @@ class ProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f' - Страница пользователя: {self.object.user.username}'
+        context['title'] = f' - Профиль пользователя: {self.object.user.username}'
         return context
 
 
