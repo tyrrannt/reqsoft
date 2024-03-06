@@ -68,7 +68,7 @@ class ArticleDetailView(LoginRequiredMixin, ViewCountMixin, DetailView):
         """
         context = super().get_context_data(**kwargs)
         category = Category.objects.all()
-        context['title'] = f'{self.object.title} - TEST'
+        context['title'] = self.object.title
         context['category'] = category
         context['form'] = CommentCreateForm
         context['similar_articles'] = self.get_similar_articles(self.object)
